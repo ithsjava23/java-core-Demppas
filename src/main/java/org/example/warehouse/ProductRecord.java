@@ -1,36 +1,37 @@
 package org.example.warehouse;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class ProductRecord {
-   private String Name;
-    private String prodID;
-    private String Category;
-    public Double Price;
+    private String name;
+    private UUID prodID;
+    private String category;
+    private Double price;
 
-    ProductRecord(String Name, int prodID, String Category, Double Price) {
-        this.Name = Name;
+    ProductRecord(UUID prodID, String name, String category, Double price) {
+        this.name = name;
         this.prodID = prodID;
-        this.Category = Category;
-        this.Price = Price;
+        this.category = category;
+        this.price = price;
     }
 
-    public static String getName() {
-        return Name;
+    public String name() {
+        return name;
     }
 
-    public static String getProdID() {
+    public UUID uuid() {
         return prodID;
     }
 
-    public static String getCategory() {
-        return Category;
+    public String category() {
+        return category;
     }
 
-    public static Double getPrice() {
-        return Price;
+    public Double price() {
+        return price;
     }
-
+    public void setPrice(Double price){this.price = price;}
 
 
 }
