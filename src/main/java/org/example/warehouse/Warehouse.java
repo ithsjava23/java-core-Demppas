@@ -6,6 +6,10 @@ import java.util.*;
 public class Warehouse {
     ArrayList<ProductRecord> productList = new ArrayList<>();
     String name = "";
+
+    private Warehouse (){
+
+    }
     public static Warehouse getInstance() {
         Warehouse warehouse = new Warehouse();
         return warehouse;
@@ -39,8 +43,13 @@ public class Warehouse {
             throw new IllegalArgumentException("Category can't be null.");
         } if (prodID == null){
             prodID = UUID.randomUUID();
-        } if (price == null) price = BigDecimal.valueOf(0,2);
+        } if (price == null) price = BigDecimal.ZERO;
         ProductRecord productRecord = new ProductRecord(prodID, name, category, price);
+        for (ProductRecord existingProduct: productList){
+            if (productRecord.uuid().equals(existingProduct.uuid())){
+                throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
+            }
+        }
         productList.add(productRecord);
         return productRecord;
     }
@@ -61,36 +70,43 @@ public class Warehouse {
         for (ProductRecord productRecord:productList) {
             if (prodID != null && prodID.equals(productRecord.uuid())) {
                productRecord.setPrice(price);
+               return;
             }
         }
+        throw new IllegalArgumentException("Product with that id doesn't exist.");
     }
 
-    public List<ArrayList<ProductRecord>> getChangedProducts (){
+
+    public List<ProductRecord> getChangedProducts (){
         var newPriceProduct = new ArrayList<ProductRecord>();
         for (ProductRecord productRecord:productList){
             if (productRecord.getChanged()){
                 newPriceProduct.add(productRecord);
             }
         }
-        return List.of(newPriceProduct);
+        return Collections.unmodifiableList(newPriceProduct);
     }
 
     public Map<Category, List<ProductRecord>> getProductsGroupedByCategories() {
         Map <Category, List<ProductRecord>> mapOfCategory = new HashMap<>();
         for (ProductRecord productRecord:productList){
-            if (productRecord.category().equals(Category)){
-                mapOfCategory.get(Category).add(productRecord);
+            if (mapOfCategory.containsKey(productRecord.category())){
+                mapOfCategory.get(productRecord.category()).add(productRecord);
+            } else {
+                var newList = new ArrayList<ProductRecord>();
+                newList.add(productRecord);
+                mapOfCategory.put(productRecord.category(), newList);
             }
         }
-
-
-        //group products by category
+        return mapOfCategory;
     }
     public List <ProductRecord> getProductsBy (Category category){
-        Object obj = category;
+        var categoryList = new ArrayList<ProductRecord>();
         for (ProductRecord productRecord:productList){
-            if (getProductsGroupedByCategories().containsKey(category)
+            if (productRecord.category().equals(category)){
+            categoryList.add(productRecord);
+            }
         }
-        //find products belonging to category
+        return categoryList;
     }
 }
