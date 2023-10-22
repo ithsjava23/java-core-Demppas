@@ -1,10 +1,7 @@
 package org.example.warehouse;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Warehouse {
     ArrayList<ProductRecord> productList = new ArrayList<>();
@@ -27,51 +24,73 @@ public class Warehouse {
     }
     @Override
     public boolean equals (Object obj){
-        // is obj null? is obj1 instance of warehouse? if not false.
-        return false;
+        if (obj != null && obj.equals(getName())) return true;
+            else return false;
     }
 
-    public void addProduct(UUID prodID, String name, String category, Double price) {
+    public boolean isEmpty (){
+        return productList.isEmpty();
+    }
+
+    public ProductRecord addProduct(UUID prodID, String name, Category category, BigDecimal price) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Product name can't be null or empty.");
+        } if (category == null){
+            throw new IllegalArgumentException("Category can't be null.");
+        } if (prodID == null){
+            prodID = UUID.randomUUID();
+        } if (price == null) price = BigDecimal.valueOf(0,2);
         ProductRecord productRecord = new ProductRecord(prodID, name, category, price);
         productList.add(productRecord);
-    }
-
-    public void tryName (ProductRecord productRecord) {
-        if (productRecord.name().isEmpty() || productRecord.name() == "") {
-            throw new IllegalArgumentException("Product name can't be null or empty.");
-        }
-    }
-    public void tryCategory (ProductRecord productRecord){
-        if (productRecord.category().isEmpty()) {
-            throw new IllegalArgumentException("Category can't be null.");
-        }
-    }
-
-    public void checkID (ProductRecord productRecord){
-        if (productRecord.uuid().equals("") || productRecord.uuid().isEmpty()){
-            //assign UUID to ProdID
-        }
-    }
-
-    public void tryPrice (ProductRecord productRecord){
-        if (productRecord.price().isNaN()) {
-            productRecord.setPrice(Double.valueOf(0));
-        }
+        return productRecord;
     }
 
     public List<ProductRecord> getProducts(){
         return Collections.unmodifiableList(productList);
     }
-    public ProductRecord getProductById (UUID prodID){
+    public List<ProductRecord> getProductById (UUID prodID){
+        var foundProduct = new ArrayList<ProductRecord>();
         for (ProductRecord productRecord:productList){
             if (prodID == productRecord.uuid()){
-                return productRecord;
+                foundProduct.add(productRecord);
             }
         }
-        return null;
+        return Collections.unmodifiableList(foundProduct);
+    }
+    public void updateProductPrice(UUID prodID, BigDecimal price) {
+        for (ProductRecord productRecord:productList) {
+            if (prodID != null && prodID.equals(productRecord.uuid())) {
+               productRecord.setPrice(price);
+            }
+        }
     }
 
-    public void updateProductPrice(UUID uuid, Double price) {
-        //change a product price and save it
+    public List<ArrayList<ProductRecord>> getChangedProducts (){
+        var newPriceProduct = new ArrayList<ProductRecord>();
+        for (ProductRecord productRecord:productList){
+            if (productRecord.getChanged()){
+                newPriceProduct.add(productRecord);
+            }
+        }
+        return List.of(newPriceProduct);
+    }
+
+    public Map<Category, List<ProductRecord>> getProductsGroupedByCategories() {
+        Map <Category, List<ProductRecord>> mapOfCategory = new HashMap<>();
+        for (ProductRecord productRecord:productList){
+            if (productRecord.category().equals(Category)){
+                mapOfCategory.get(Category).add(productRecord);
+            }
+        }
+
+
+        //group products by category
+    }
+    public List <ProductRecord> getProductsBy (Category category){
+        Object obj = category;
+        for (ProductRecord productRecord:productList){
+            if (getProductsGroupedByCategories().containsKey(category)
+        }
+        //find products belonging to category
     }
 }
