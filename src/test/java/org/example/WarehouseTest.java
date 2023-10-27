@@ -202,10 +202,10 @@ class WarehouseTest {
         @Test
         @DisplayName("changing a products price should be saved")
         void changingAProductsNameShouldBeSaved() {
-         //   warehouse.updateProductPrice(addedProducts.get(1).uuid(), BigDecimal.valueOf(311, 2));
-         //   assertThat(warehouse.getProductById(addedProducts.get(1).uuid())).isNotEmpty()
-         //           .get()
-         //           .hasFieldOrPropertyWithValue("price", BigDecimal.valueOf(311, 2));
+            warehouse.updateProductPrice(addedProducts.get(1).uuid(), BigDecimal.valueOf(311, 2));
+            assertThat(warehouse.getProductById(addedProducts.get(1).uuid())).isNotEmpty()
+                    .get()
+                    .hasFieldOrPropertyWithValue("price", BigDecimal.valueOf(311, 2));
         }
 
         @Test

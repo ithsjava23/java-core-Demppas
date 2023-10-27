@@ -57,14 +57,13 @@ public class Warehouse {
     public List<ProductRecord> getProducts(){
         return Collections.unmodifiableList(productList);
     }
-    public List<ProductRecord> getProductById (UUID prodID){
-        var foundProduct = new ArrayList<ProductRecord>();
+    public Optional<ProductRecord> getProductById (UUID prodID){
         for (ProductRecord productRecord:productList){
             if (prodID == productRecord.uuid()){
-                foundProduct.add(productRecord);
+                return Optional.of(productRecord);
             }
         }
-        return Collections.unmodifiableList(foundProduct);
+        return Optional.empty();
     }
     public void updateProductPrice(UUID prodID, BigDecimal price) {
         for (ProductRecord productRecord:productList) {
