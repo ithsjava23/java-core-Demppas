@@ -26,6 +26,7 @@ private static final Map <String, Category> mapOfCategories = new HashMap<>();
         if (obj == this) return true;
         if (!(obj instanceof Category cat)) return false;
         return cat.getName().equals(this.getName());
+
     }
     public void setName(String name){
         this.name = name;
