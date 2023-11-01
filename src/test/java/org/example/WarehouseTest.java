@@ -199,6 +199,7 @@ class WarehouseTest {
             assertThat(warehouse.getProducts()).isEqualTo(addedProducts);
         }
 
+
         @Test
         @DisplayName("changing a products price should be saved")
         void changingAProductsNameShouldBeSaved() {
